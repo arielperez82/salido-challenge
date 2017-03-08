@@ -8,8 +8,8 @@ default: &default
   encoding: unicode
   pool: 5
   timeout: 5000
-  username: Ariel
-  password: test1234
+  username: <USERNAME>
+  password: <PASSWORD>
 
 development:
   <<: *default

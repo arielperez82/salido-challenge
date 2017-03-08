@@ -6,7 +6,8 @@ class CreateLocationMenuItemPrices < ActiveRecord::Migration[5.0]
       t.references :day_part, foreign_key: true
       t.decimal :price, precision: 10, scale: 2, null: false
 
-      t.timestamps
+      t.datetime :created_at, default: -> { 'CURRENT_TIMESTAMP' }
+      t.datetime :updated_at, default: -> { 'CURRENT_TIMESTAMP' }
     end
   end
 end

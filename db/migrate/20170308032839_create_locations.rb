@@ -4,8 +4,8 @@ class CreateLocations < ActiveRecord::Migration[5.0]
       t.references :brand, foreign_key: true
       t.string :name, null: false
 
-      t.datetime :created_at, default: -> { 'CURRENT_TIMESTAMP' }
-      t.datetime :updated_at, default: -> { 'CURRENT_TIMESTAMP' }
+      t.datetime :created_at, null: false, default: -> { 'CURRENT_TIMESTAMP' }
+      t.datetime :updated_at, null: false, default: -> { 'CURRENT_TIMESTAMP' }
     end
   end
 end

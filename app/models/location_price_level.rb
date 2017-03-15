@@ -1,14 +1,14 @@
 class LocationPriceLevel < ApplicationRecord
-  belongs_to :location
-  belongs_to :order_type
-  belongs_to :day_part, optional: true
-  belongs_to :price_level
+  belongs_to :location, inverse_of: :price_levels
+  belongs_to :order_type, inverse_of: :location_price_levels
+  belongs_to :day_part, inverse_of: :location_price_levels, optional: true
+  belongs_to :price_level, inverse_of: :location_price_levels
 
   validates_presence_of :location
   validates_presence_of :order_type
   validates_presence_of :price_level
 
-  validates_uniqueness_of :price_level, scope: [:order_type, :day_part]
+  validates_uniqueness_of :price_level, scope: [:day_part, :order_type, :location]
 
   validate :must_match_brand, :must_match_location
 

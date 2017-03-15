@@ -1,6 +1,6 @@
 class MenuItemPrice < ApplicationRecord
-  belongs_to :menu_item
-  belongs_to :price_level
+  belongs_to :menu_item, inverse_of: :prices
+  belongs_to :price_level, inverse_of: :menu_item_prices
 
   validates_presence_of :menu_item
   validates_presence_of :price_level

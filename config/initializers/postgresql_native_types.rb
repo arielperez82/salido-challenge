@@ -5,8 +5,7 @@ module ActiveRecord
     class PostgreSQLAdapter
       NATIVE_DATABASE_TYPES.merge!(
         datetime:  { name: "timestamptz" },
-        timestamp: { name: "timestamptz" },
-        string:    { name: "text" }
+        timestamp: { name: "timestamptz" }
       )
     end
   end

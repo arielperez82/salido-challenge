@@ -12,7 +12,7 @@ class Location < ApplicationRecord
   validates_presence_of :brand
   validates_uniqueness_of :name, scope: :brand
 
-  def get_menu_item_price(menu_item, order_type, day_part = nil)
+  def get_menu_item_price_and_level(menu_item, order_type, day_part = nil)
     location_menu_item = menu_items.where(menu_item_id: menu_item).first
 
     if location_menu_item.present?
@@ -28,7 +28,7 @@ class Location < ApplicationRecord
         valid_price_levels = Set.new(day_part_location_price_levels.compact.map(&:price_level))
         valid_price_levels.each do |p|
           if menu_item_price = menu_item_prices.find { |m| m.price_level.eql? p }
-            return menu_item_price.price
+            return { price_level: menu_item_price.price_level, price: menu_item_price.price }
           end
         end
       end

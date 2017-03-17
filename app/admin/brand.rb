@@ -1,4 +1,6 @@
 ActiveAdmin.register Brand do
+  menu label: 'Configure'
+
   permit_params :name,
                 locations_attributes: [:id, :name, :_destroy],
                 menu_items_attributes: [:id, :name, :_destroy],

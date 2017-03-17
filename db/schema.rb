@@ -10,29 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170310221719) do
+ActiveRecord::Schema.define(version: 20170316215005) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "active_admin_comments", force: :cascade do |t|
-    t.string   "namespace"
-    t.text     "body"
-    t.string   "resource_id",   null: false
-    t.string   "resource_type", null: false
-    t.string   "author_type"
-    t.integer  "author_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-    t.index ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id", using: :btree
-    t.index ["namespace"], name: "index_active_admin_comments_on_namespace", using: :btree
-    t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id", using: :btree
-  end
 
   create_table "brands", force: :cascade do |t|
     t.string   "name",                                null: false
     t.datetime "created_at", default: -> { "now()" }, null: false
     t.datetime "updated_at", default: -> { "now()" }, null: false
+    t.index ["name"], name: "index_brands_on_name", unique: true, using: :btree
   end
 
   create_table "day_parts", force: :cascade do |t|
@@ -40,6 +27,7 @@ ActiveRecord::Schema.define(version: 20170310221719) do
     t.string   "name",                                 null: false
     t.datetime "created_at",  default: -> { "now()" }, null: false
     t.datetime "updated_at",  default: -> { "now()" }, null: false
+    t.index ["location_id", "name"], name: "index_day_parts_on_location_id_and_name", unique: true, using: :btree
     t.index ["location_id"], name: "index_day_parts_on_location_id", using: :btree
   end
 
@@ -48,6 +36,7 @@ ActiveRecord::Schema.define(version: 20170310221719) do
     t.integer  "menu_item_id",                          null: false
     t.datetime "created_at",   default: -> { "now()" }, null: false
     t.datetime "updated_at",   default: -> { "now()" }, null: false
+    t.index ["location_id", "menu_item_id"], name: "index_location_menu_items_on_location_id_and_menu_item_id", unique: true, using: :btree
     t.index ["location_id"], name: "index_location_menu_items_on_location_id", using: :btree
     t.index ["menu_item_id"], name: "index_location_menu_items_on_menu_item_id", using: :btree
   end
@@ -60,6 +49,8 @@ ActiveRecord::Schema.define(version: 20170310221719) do
     t.datetime "created_at",     default: -> { "now()" }, null: false
     t.datetime "updated_at",     default: -> { "now()" }, null: false
     t.index ["day_part_id"], name: "index_location_price_levels_on_day_part_id", using: :btree
+    t.index ["location_id", "order_type_id", "day_part_id", "price_level_id"], name: "lpl_4col_uq_idx", unique: true, where: "(day_part_id IS NOT NULL)", using: :btree
+    t.index ["location_id", "order_type_id", "price_level_id"], name: "lpl_3col_uq_idx", unique: true, where: "(day_part_id IS NULL)", using: :btree
     t.index ["location_id"], name: "index_location_price_levels_on_location_id", using: :btree
     t.index ["order_type_id"], name: "index_location_price_levels_on_order_type_id", using: :btree
     t.index ["price_level_id"], name: "index_location_price_levels_on_price_level_id", using: :btree
@@ -70,6 +61,7 @@ ActiveRecord::Schema.define(version: 20170310221719) do
     t.string   "name",                                null: false
     t.datetime "created_at", default: -> { "now()" }, null: false
     t.datetime "updated_at", default: -> { "now()" }, null: false
+    t.index ["brand_id", "name"], name: "index_locations_on_brand_id_and_name", unique: true, using: :btree
     t.index ["brand_id"], name: "index_locations_on_brand_id", using: :btree
   end
 
@@ -79,6 +71,7 @@ ActiveRecord::Schema.define(version: 20170310221719) do
     t.decimal  "price",          precision: 10, scale: 2,                          null: false
     t.datetime "created_at",                              default: -> { "now()" }, null: false
     t.datetime "updated_at",                              default: -> { "now()" }, null: false
+    t.index ["menu_item_id", "price_level_id"], name: "index_menu_item_prices_on_menu_item_id_and_price_level_id", unique: true, using: :btree
     t.index ["menu_item_id"], name: "index_menu_item_prices_on_menu_item_id", using: :btree
     t.index ["price_level_id"], name: "index_menu_item_prices_on_price_level_id", using: :btree
   end
@@ -88,6 +81,7 @@ ActiveRecord::Schema.define(version: 20170310221719) do
     t.string   "name",                                null: false
     t.datetime "created_at", default: -> { "now()" }, null: false
     t.datetime "updated_at", default: -> { "now()" }, null: false
+    t.index ["brand_id", "name"], name: "index_menu_items_on_brand_id_and_name", unique: true, using: :btree
     t.index ["brand_id"], name: "index_menu_items_on_brand_id", using: :btree
   end
 
@@ -96,6 +90,7 @@ ActiveRecord::Schema.define(version: 20170310221719) do
     t.string   "name",                                null: false
     t.datetime "created_at", default: -> { "now()" }, null: false
     t.datetime "updated_at", default: -> { "now()" }, null: false
+    t.index ["brand_id", "name"], name: "index_order_types_on_brand_id_and_name", unique: true, using: :btree
     t.index ["brand_id"], name: "index_order_types_on_brand_id", using: :btree
   end
 
@@ -104,6 +99,7 @@ ActiveRecord::Schema.define(version: 20170310221719) do
     t.string   "name",                                null: false
     t.datetime "created_at", default: -> { "now()" }, null: false
     t.datetime "updated_at", default: -> { "now()" }, null: false
+    t.index ["brand_id", "name"], name: "index_price_levels_on_brand_id_and_name", unique: true, using: :btree
     t.index ["brand_id"], name: "index_price_levels_on_brand_id", using: :btree
   end
 

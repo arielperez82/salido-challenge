@@ -10,4 +10,6 @@ Rails.application.routes.draw do
       resources :day_parts, only: [:index]
     end
   end
+
+  root 'admin/dashboard#index'
 end

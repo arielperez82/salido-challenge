@@ -32,6 +32,12 @@ workers ENV.fetch("WEB_CONCURRENCY") { 3 }
 #
 preload_app!
 
+before_fork do
+  if defined? ::ActiveRecord && ::ActiveRecord::Base
+    ActiveRecord::Base.connection_pool.disconnect!
+  end
+end
+
 # The code in the `on_worker_boot` will be called if you are using
 # clustered mode by specifying a number of `workers`. After each worker
 # process is booted this block will be run, if you are using `preload_app!`

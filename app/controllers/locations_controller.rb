@@ -15,6 +15,6 @@ class LocationsController < BrandSubResourcesController
 
      @price_and_level = @location.get_menu_item_price_and_level(@menu_item, @order_type, @day_part)
 
-     respond_with @price_and_level
+     respond_with @price_and_level || {}
   end
 end

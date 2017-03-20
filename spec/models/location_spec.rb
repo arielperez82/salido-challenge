@@ -56,10 +56,22 @@ RSpec.describe Location, type: :model do
               menu_item.prices.create(price_level: day_part_price_level, price: day_part_price)
             end
 
-            it "returns the configured price for this menu item, order type, day part" do
-              menu_item_price = location.get_menu_item_price_and_level(menu_item, order_type, day_part)
-              expect(menu_item_price[:price_level]).to eq(day_part_price_level)
-              expect(menu_item_price[:price]).to eq(day_part_price)
+            context "when day part is the configured day part" do
+              it "returns the configured price for this menu item, order type, day part" do
+                menu_item_price = location.get_menu_item_price_and_level(menu_item, order_type, day_part)
+                expect(menu_item_price[:price_level]).to eq(day_part_price_level)
+                expect(menu_item_price[:price]).to eq(day_part_price)
+              end
+            end
+
+            context "when day part is not the configured day part" do
+              let(:non_configured_day_part) { FactoryGirl.create(:day_part, location: location) }
+
+              it "returns the configured price for this menu item, order type" do
+                menu_item_price = location.get_menu_item_price_and_level(menu_item, order_type, non_configured_day_part)
+                expect(menu_item_price[:price_level]).to eq(order_type_price_level)
+                expect(menu_item_price[:price]).to eq(order_type_price)
+              end
             end
           end
         end

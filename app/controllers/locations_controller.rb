@@ -11,7 +11,7 @@ class LocationsController < BrandSubResourcesController
      @location = @brand.locations.find(params[:id])
      @menu_item = @brand.menu_items.where(id: params[:menu_item_id]).first
      @order_type = @brand.order_types.where(id: params[:order_type_id]).first
-     @day_part = @location.day_parts.where(id: params[:order_type_id]).first
+     @day_part = @location.day_parts.where(id: params[:day_part_id]).first
 
      @price_and_level = @location.get_menu_item_price_and_level(@menu_item, @order_type, @day_part)
 
